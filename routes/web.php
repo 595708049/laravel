@@ -14,12 +14,14 @@
 Route::get('/', function () {
     return view('welcome');
 });
+// admin
+Route::group(['namespace'=>'Admin', 'prefix'=>'admin', 'middleware'=>'AdminLogin'], function(){
 
-// admin首页
-Route::get('/admin', 'Admin\IndexController@index');
+	// admin首页
+	Route::get('', 'IndexController@index');
 
-// admin登陆页面
-Route::get('/admin/login', 'Admin\LoginController@login');
-
+	// admin登陆页面
+	Route::get('login', 'LoginController@login');
+});
 
 
