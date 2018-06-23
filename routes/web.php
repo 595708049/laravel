@@ -18,5 +18,8 @@ Route::get('/', function () {
 // admin首页
 Route::get('/admin', 'Admin\IndexController@index');
 
+// admin登陆页面
+Route::get('/admin/login', 'Admin\LoginController@login');
+
 
 
