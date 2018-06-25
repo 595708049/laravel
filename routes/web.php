@@ -14,14 +14,22 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
 // admin
-Route::group(['namespace'=>'Admin', 'prefix'=>'admin', 'middleware'=>'AdminLogin'], function(){
+Route::group(['namespace'=>'Admin', 'prefix'=>'admin', 'middleware'=>['AdminLogin']], function(){
 
 	// admin首页
 	Route::get('', 'IndexController@index');
 
 	// admin登陆页面
 	Route::get('login', 'LoginController@login');
+
+	// 验证码
+    Route::get('captcha', 'LoginController@yzm');
+    // 验证验证码
+    Route::post('login/check_yzm', 'LoginController@check_yzm');
 });
 
 

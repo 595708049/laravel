@@ -12,4 +12,22 @@ class LoginController extends BaseController
     {
     	return view('Admin/Login/login');
     }
+
+    // 验证码
+    public function yzm()
+    {
+        return captcha();
+    }
+
+    // 验证验证码是否正确
+    public function check_yzm(Request $request)
+    {
+        dd($_POST);
+        $name = $request->input('name');
+        $pwd = $request->input('password');
+        $captcha = $request->input('captcha');
+        if($captcha == '' || $captcha == '验证码:') {
+
+        }
+    }
 }
