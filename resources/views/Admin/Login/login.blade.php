@@ -26,7 +26,7 @@
 <!-- <div class="header"></div> -->
 <div class="loginWraper">
 	<div id="loginform" class="loginBox">
-		<form class="form form-horizontal" action="{{ url('admin/login/check_yzm') }}" method="post">
+		<form class="form form-horizontal" action="{{ url('admin/login/check') }}" method="post">
 			{{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
 			{{ csrf_field() }}
 			<div class="row cl">

@@ -20,14 +20,15 @@ class LoginController extends BaseController
     }
 
     // 验证验证码是否正确
-    public function check_yzm(Request $request)
+    public function check(Request $request)
     {
-        dd($_POST);
-        $name = $request->input('name');
-        $pwd = $request->input('password');
+//        dd($_POST);
+//        $name = $request->input('name');
+//        $pwd = $request->input('password');
         $captcha = $request->input('captcha');
-        if($captcha == '' || $captcha == '验证码:') {
-
-        }
+//        if($captcha == '' || $captcha == '验证码:') {
+//
+//        }
+        dd(captcha_check($captcha));
     }
 }
