@@ -15,6 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// 成功页面
+//Route::get('/admin/success', function(){
+//    return view('success')->with([
+//        'message'=>'你已经提交申请，请您耐心等待！',
+//        'url' =>'/index',
+//        'jumpTime'=>30,
+//    ]);
+//});
 
 // admin登陆页面
 Route::group(['prefix'=>'admin', 'namespace'=>'Admin'], function(){
