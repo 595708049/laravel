@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 // 成功页面
 //Route::get('/admin/success', function(){
-//    return view('success')->with([
+//    return view('admin.success')->with([
 //        'message'=>'你已经提交申请，请您耐心等待！',
 //        'url' =>'/index',
 //        'jumpTime'=>30,
@@ -47,6 +47,8 @@ Route::group(['namespace'=>'Admin', 'prefix'=>'admin', 'middleware'=>['AdminLogi
 	// admin管理员管理---资源路由resource
     Route::resource('admin', 'AdminController');
 
+    // admin状态调整路由
+    Route::post('status', 'AdminController@status');
 });
 
 

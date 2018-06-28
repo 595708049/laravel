@@ -10,6 +10,6 @@ class IndexController extends BaseController
     //  后台首页
     public function index()
     {
-        return view('Admin/Index/index');
+        return view('admin/index/index');
     }
 }

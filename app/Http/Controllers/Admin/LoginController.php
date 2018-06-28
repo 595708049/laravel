@@ -10,7 +10,7 @@ class LoginController extends BaseController
     //登陆页面
     public function login()
     {
-    	return view('Admin/Login/login');
+    	return view('admin/login/login');
     }
 
     // 验证码

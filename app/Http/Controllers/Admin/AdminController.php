@@ -16,7 +16,7 @@ class AdminController extends Controller
     {
         $data = \DB::table('admin')->get();
 //        dd($data);
-        return view("Admin.Admin.list", ['data'=>$data]);
+        return view("admin.admin.list", ['data'=>$data]);
     }
 
     /**
@@ -27,18 +27,19 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('Admin.Admin.add');
+        return view('admin.admin.add');
         //
     }
 
     /**
      * Store a newly created resource in storage.
-     *
+     * 数据添加操作
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        /*数据验证
         $data = $request->all();
         $rule = [
             'adminName' => 'required|unique:admin',
@@ -52,8 +53,9 @@ class AdminController extends Controller
         ];
         $validator = \Validator::make($data, $rule, $message);
 //        dd($validator);
+        */
         //
-        if($validator->passes()){
+//        if($validator->passes()){
             $adminName = $request->input('adminName');
             $password = $request->input('password');
 //        $password2 = $request->input('password2');
@@ -69,25 +71,34 @@ class AdminController extends Controller
                 'addtime'  => time(),
                 'status'   => $status,
             ];
+            // 判断用户名是否存在
+            $name = \DB::table('admin')->where(['name'=>$adminName])->count();
+            if($name > 0){
+                return view('admin.success')->with([
+                    'message'=>'用户名已经存在！',
+                    'url' => url('admin/admin/create'),
+                    'jumpTime'=>3,
+                ]);
+            }
             $res = \DB::table('admin')->insert($arr);
 //        dd($res);
             if($res){
-                return view('Admin.success')->with([
+                return view('admin.success')->with([
                     'message'=>'添加成功！',
                     'url' => url('admin/admin/create'),
                     'jumpTime'=>3,
                 ]);
             }else{
-                return view('Admin.success')->with([
+                return view('admin.success')->with([
                     'message'=>'添加失败！',
                     'url' => url('admin/admin/create'),
                     'jumpTime'=>3,
                 ]);
             }
-        }else{
-            dd($validator->getMessageBag()->getMessages());
-             return $validator->getMessageBag()->getMessages();
-        }
+//        }else{
+////            dd($validator->getMessageBag()->getMessages());
+//             return $validator->getMessageBag()->getMessages();
+//        }
 
     }
 
@@ -112,6 +123,9 @@ class AdminController extends Controller
     public function edit($id)
     {
         //
+        $data = \DB::table('admin')->where(['id'=>$id])->first();
+//        dd($data);
+        return view("admin.admin.edit", ['data'=>$data]);
     }
 
     /**
@@ -124,7 +138,7 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         //
-        dd($id);
+        dd($_POST);
     }
 
     /**
@@ -136,5 +150,23 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * admin状态修改 1、启用 0、禁用
+     */
+    public function status(Request $request)
+    {
+//        return dd($request->all());
+        $arr = $request->except('_token');   // 剔除_token
+//        return dd($arr);
+
+        $res = \DB::table("admin")->where(['id'=>$arr['id']])->update(['status'=>$arr['status']]);
+        if($res == 1){
+            return 1;
+        }else{
+            return 0;
+        }
+//        return dd($res);
     }
 }

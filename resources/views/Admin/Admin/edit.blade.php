@@ -23,24 +23,24 @@
 <script>DD_belatedPNG.fix('*');</script><![endif]-->
 <!--/meta 作为公共模版分离出去-->
 
-<title>添加管理员 - 管理员管理</title>
+<title>编辑管理员 - 管理员管理</title>
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
 <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
 </head>
 <body>
 <article class="cl pd-20">
-	<form action="/admin/admin" method="post" class="form form-horizontal" id="form-admin-add">
+	<form action="/admin/admin/{{ $data->id }}" method="put" class="form form-horizontal" id="form-admin-add">
 		{{ csrf_field() }}
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="adminName" name="adminName">
+				<input type="text" class="input-text" value="{{ $data->name }}" placeholder="" id="adminName" name="adminName">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="password" class="input-text" autocomplete="off" value="" placeholder="密码" id="password" name="password">
+				<input type="password" class="input-text" autocomplete="off" value="{{ $data->password }}" placeholder="密码" id="password" name="password">
 			</div>
 		</div>
 		<div class="row cl">
@@ -53,11 +53,11 @@
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
 			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 				<div class="radio-box">
-					<input name="sex" type="radio" id="sex-1" value="1" checked>
+					<input name="sex" type="radio" id="sex-1" value="1"  @if($data->sex == 1)checked @endif>
 					<label for="sex-1">男</label>
 				</div>
 				<div class="radio-box">
-					<input type="radio" id="sex-2" value="2" name="sex">
+					<input type="radio" id="sex-2" value="2" name="sex" @if($data->sex == 2)checked @endif>
 					<label for="sex-2">女</label>
 				</div>
 			</div>
@@ -89,11 +89,11 @@
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>账号状态：</label>
 			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 				<div class="radio-box">
-					<input name="status" type="radio" id="status-1" value="1" checked>
+					<input name="status" type="radio" id="status-1" value="1" @if($data->status == 1)checked @endif>
 					<label for="status-1">正常</label>
 				</div>
 				<div class="radio-box">
-					<input type="radio" id="status-2" value="0" name="status">
+					<input type="radio" id="status-2" value="0" name="status" @if($data->status == 0)checked @endif>
 					<label for="status-2">禁用</label>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-﻿@extends("Admin.common.common")
+﻿@extends("admin.common.common")
 
 @section('title')
 <title>管理员列表 - 管理员列表</title>
@@ -64,7 +64,7 @@
 							<a style="text-decoration:none" onClick="admin_start(this, '{{ $v->id }}')" href="javascript:;" title="启用">
 							<i class="Hui-iconfont">&#xe615;</i></a>
 						@endif
-							 <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+							 <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','/admin/admin/{{ $v->id }}/edit','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
 					</tr>
                 @endforeach
 				</tbody>
@@ -104,26 +104,24 @@ function admin_edit(title,url,id,w,h){
 }
 /*管理员-停用*/
 function admin_stop(obj,id){
-    var status = $("#status").html();
-    if(status == '已启用'){
-        status = 1;
-    }
-    console.log(status);  
 	layer.confirm('确认要停用吗？',function(index){
 		//此处请求后台程序，下方是成功后的前台处理……
 		$.ajax({
-			url:"/admin/admin/"+id,
+			url:"/admin/status",
 			type:"post",
 			dataType:"json",
-			data:{'status':status, '_token':'{{ csrf_token() }}', "_method":"update"},
-			success:function(){
-
+			data:{'id':id, 'status':0, '_token':'{{ csrf_token() }}'},
+			success:function(data){
+				if(data == 1){
+                    $(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_start(this,id)" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">已禁用</span>');
+                    $(obj).remove();
+                    layer.msg('已停用!',{icon: 5,time:1000});
+				}else{
+				    return;
+				}
 			}
 		});
-		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_start(this,id)" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">已禁用</span>');
-		$(obj).remove();
-		layer.msg('已停用!',{icon: 5,time:1000});
 	});
 }
 
@@ -131,11 +129,22 @@ function admin_stop(obj,id){
 function admin_start(obj,id){
 	layer.confirm('确认要启用吗？',function(index){
 		//此处请求后台程序，下方是成功后的前台处理……
-		
-		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_stop(this,id)" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
-		$(obj).remove();
-		layer.msg('已启用!', {icon: 6,time:1000});
+		$.ajax({
+			url:"/admin/status",
+			type:"post",
+			dataType:'json',
+			data:{'id':id, 'status':1, '_token':'{{ csrf_token() }}'},
+			success:function(data){
+			    if(data == 1){
+                    $(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_stop(this,id)" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+                    $(obj).remove();
+                    layer.msg('已启用!', {icon: 6,time:1000});
+				}else{
+			        return;
+				}
+			}
+		});
 	});
 }
 </script> 
