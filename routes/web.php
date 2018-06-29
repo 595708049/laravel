@@ -49,6 +49,9 @@ Route::group(['namespace'=>'Admin', 'prefix'=>'admin', 'middleware'=>['AdminLogi
 
     // admin状态调整路由
     Route::post('status', 'AdminController@status');
+
+    // 批量删除
+    Route::post('dels', 'AdminController@dels');
 });
 
 

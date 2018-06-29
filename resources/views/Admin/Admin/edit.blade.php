@@ -29,8 +29,9 @@
 </head>
 <body>
 <article class="cl pd-20">
-	<form action="/admin/admin/{{ $data->id }}" method="put" class="form form-horizontal" id="form-admin-add">
+	<form action="/admin/admin/{{ $data->id }}" method="post" class="form form-horizontal" id="form-admin-add">
 		{{ csrf_field() }}
+        <input type="hidden" name="_method" value="put">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员：</label>
 			<div class="formControls col-xs-8 col-sm-9">

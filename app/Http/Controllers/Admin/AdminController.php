@@ -15,8 +15,9 @@ class AdminController extends Controller
     public function index()
     {
         $data = \DB::table('admin')->get();
+        $count = \DB::table('admin')->count();
 //        dd($data);
-        return view("admin.admin.list", ['data'=>$data]);
+        return view("admin.admin.list", ['data'=>$data, 'count'=>$count]);
     }
 
     /**
@@ -138,7 +139,44 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         //
-        dd($_POST);
+//        dd($request->all());
+          $arr = $request->except(['_method', '_token', 'password2']);  // 剔除
+//          dd($arr);
+          $name = \DB::table('admin')->pluck('name');
+          $n = $name->toArray();
+//          dd($n);
+//        echo $arr['adminName'];exit;
+          $a = $arr['adminName'];
+          if(in_array($a, $n)){
+              return view('admin.success')->with([
+                  'message'=>'修改失败！',
+                  'url' => url('admin/admin/' . $id . '/edit'),
+                  'jumpTime'=>3,
+              ]);
+          }
+          $arr1 = [
+              'name'     => $arr['adminName'],
+              'password' => $arr['password'],
+              'sex'      => $arr['sex'],
+              'role'     => $arr['adminRole'],
+              'status'   => $arr['status']
+          ];
+//          dd($arr1);
+          $res = \DB::table('admin')->where(['id'=>$id])->update($arr1);
+//          dd($res);
+          if($res){
+              return view('admin.success')->with([
+                  'message'=>'修改成功！',
+                  'url' => url('admin/admin/'),
+                  'jumpTime'=>3,
+              ]);
+          }else{
+              return view('admin.success')->with([
+                  'message'=>'修改失败！',
+                  'url' => url('admin/admin/' . $id . '/edit'),
+                  'jumpTime'=>3,
+              ]);
+          }
     }
 
     /**
@@ -150,7 +188,15 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
+//        return $id;
+        $res = \DB::table('admin')->where(['id'=>$id])->delete();
+        if($res == 1){
+            return 1;
+        }else{
+            return 0;
+        }
     }
+
 
     /**
      * admin状态修改 1、启用 0、禁用
@@ -168,5 +214,21 @@ class AdminController extends Controller
             return 0;
         }
 //        return dd($res);
+    }
+
+    /***
+     * 批量删除
+     */
+    public function dels(Request $request)
+    {
+        // 取出需要的参数
+        $arr = $request->only('str');
+        $str = trim($arr['str'], ','); // 去掉两边的逗号
+        $arr1 = explode(',', $str);  // 将字符串转换为数组
+//        return dd($arr1);
+        $res = \DB::table('admin')->whereIn('id', $arr1)->delete();
+        if($res){
+            return 1;
+        }
     }
 }

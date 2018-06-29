@@ -22,7 +22,7 @@
 			{{--</div>--}}
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
 				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加管理员','{{ url('admin/admin/create') }}','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a> </span>
-				<span class="r">共有数据：<strong>54</strong> 条</span>
+				<span class="r">共有数据：<strong>{{ $count }}</strong> 条</span>
 			</div>
 			<table class="table table-border table-bordered table-bg">
 				<thead>
@@ -30,7 +30,7 @@
 						<th scope="col" colspan="9">员工列表</th>
 					</tr>
 					<tr class="text-c">
-						<th width="25"><input type="checkbox" name="" value=""></th>
+						<th width="25"><input type="checkbox" name="adminId[]" value="" id="chk"></th>
 						<th width="40">ID</th>
 						<th width="150">登录名</th>
 						{{--<th width="90">手机</th>--}}
@@ -44,7 +44,7 @@
 				<tbody>
                 @foreach($data as $v)
 					<tr class="text-c">
-						<td><input type="checkbox" value="1" name=""></td>
+						<td><input type="checkbox" value="{{ $v->id }}" name="adminId[]"></td>
 						<td>{{ $v->id }}</td>
 						<td>{{ $v->name }}</td>
 						{{--<td>13000000000</td>--}}
@@ -64,7 +64,7 @@
 							<a style="text-decoration:none" onClick="admin_start(this, '{{ $v->id }}')" href="javascript:;" title="启用">
 							<i class="Hui-iconfont">&#xe615;</i></a>
 						@endif
-							 <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','/admin/admin/{{ $v->id }}/edit','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+							 <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','/admin/admin/{{ $v->id }}/edit','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'{{ $v->id }}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
 					</tr>
                 @endforeach
 				</tbody>
@@ -91,11 +91,24 @@ function admin_add(title,url,w,h){
 }
 /*管理员-删除*/
 function admin_del(obj,id){
+    // alert(id);return;
 	layer.confirm('确认要删除吗？',function(index){
 		//此处请求后台程序，下方是成功后的前台处理……
-		
-		$(obj).parents("tr").remove();
-		layer.msg('已删除!',{icon:1,time:1000});
+		$.ajax({
+            url:"/admin/admin/"+id,
+            type:"post",
+            dataType:"json",
+            data:{'id':id, '_token':'{{ csrf_token() }}', '_method':'delete'},
+            success:function(data){
+                if(data == 1){
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!',{icon:1,time:1000});
+				}else{
+                    return;
+				}
+            }
+        });
+
 	});
 }
 /*管理员-编辑*/
@@ -147,5 +160,54 @@ function admin_start(obj,id){
 		});
 	});
 }
+
+function datadel(){
+    var aa = $('input[name="adminId[]"]');
+    var bb = $('input[name="adminId[]"]').length;
+    // console.log(bb);
+    var str = '';
+    for(i=0;i<bb;i++){
+		if($(aa[i]).attr('checked')){
+		    // alert($(aa[i]).attr('value'));
+			 str+=$(aa[i]).attr('value')+',';
+		}
+	}
+	// str = str.substring(0, str.length-1);  // 去掉最后的字符串
+	//  console.log(str);
+    layer.confirm('确认要删除吗？',function(index){
+        $.ajax({
+			url:"/admin/dels",
+			type:'post',
+			dataType:'json',
+			data:{'str':str, '_token':'{{ csrf_token() }}'},
+			success:function(data){
+			   if(data == 1){
+                   layer.msg('已删除!',{icon:1,time:1000});
+                   location.reload();
+               }
+			}
+		});
+	});
+}
+
+$('input[name="adminId[]"]').click(function(){
+	       
+    if(!$(this).is(':checked')){
+        $(this).attr('checked', 'checked');
+	}
+});
+$('#chk').click(function(){
+    var tr = $('input[name="adminId[]"]');
+    var len = $('input[name="adminId[]"]').length;
+    for(i=0;i<len;i++){
+        if($('#chk').is(':checked')){
+            // console.log($('#chk').is(':checked'));
+            $(tr[i]).attr('checked', 'checked');
+		}else{
+            // console.log($('#chk').is(':checked'));
+            $(tr[i]).removeAttr('checked');
+		}
+	}
+});
 </script> 
 @endsection
