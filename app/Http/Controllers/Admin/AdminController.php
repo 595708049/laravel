@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\AdminRole;
+use App\Admin;
 
 class AdminController extends Controller
 {
@@ -28,7 +30,10 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.admin.add');
+        // 角色信息
+        $role = \DB::table('role')->get();
+//        dd($role );
+        return view('admin.admin.add', ['role'=>$role]);
         //
     }
 
@@ -66,7 +71,7 @@ class AdminController extends Controller
             $status = $request->input("status");
             $arr = [
                 'name'     => $adminName,
-                'password' => md5($password),
+                'password' => \Hash::make($password),
                 'sex'      => $sex,
                 'role'     => $adminRole,
                 'addtime'  => time(),
@@ -81,9 +86,18 @@ class AdminController extends Controller
                     'jumpTime'=>3,
                 ]);
             }
-            $res = \DB::table('admin')->insert($arr);
+            $res = \DB::table('admin')->insertGetId($arr);   // 返回插入的id
 //        dd($res);
             if($res){
+                
+//                $admin_role = new AdminRole();
+//                $admin_role->admin_id = $res;
+//                $admin_role->role_id = $adminRole;
+//                $admin_role->save();
+                $admin = Admin::find($res);
+//                dd($admin);
+                $admin->role()->attach($adminRole);
+                
                 return view('admin.success')->with([
                     'message'=>'添加成功！',
                     'url' => url('admin/admin/create'),
@@ -124,9 +138,13 @@ class AdminController extends Controller
     public function edit($id)
     {
         //
-        $data = \DB::table('admin')->where(['id'=>$id])->first();
+        $data = \DB::table('admin')->select("admin.*", "role.roleName")
+            ->leftJoin('role', 'admin.role', '=', 'role.id')
+            ->where(['admin.id'=>$id])->first();
 //        dd($data);
-        return view("admin.admin.edit", ['data'=>$data]);
+        $role = \DB::table('role')->get();
+
+        return view("admin.admin.edit", ['data'=>$data, 'role'=>$role]);
     }
 
     /**
@@ -138,11 +156,11 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
 //        dd($request->all());
           $arr = $request->except(['_method', '_token', 'password2']);  // 剔除
 //          dd($arr);
-          $name = \DB::table('admin')->pluck('name');
+          $name = \DB::table('admin')->where('id', '<>', $id)->pluck('name');
+//          dd($name);
           $n = $name->toArray();
 //          dd($n);
 //        echo $arr['adminName'];exit;
@@ -165,6 +183,8 @@ class AdminController extends Controller
           $res = \DB::table('admin')->where(['id'=>$id])->update($arr1);
 //          dd($res);
           if($res){
+              $admin = Admin::find($id);
+              $admin->role()->attach($arr['adminRole']);
               return view('admin.success')->with([
                   'message'=>'修改成功！',
                   'url' => url('admin/admin/'),
@@ -189,6 +209,8 @@ class AdminController extends Controller
     {
         //
 //        return $id;
+        $admin = Admin::find($id);
+        $admin->role()->detach();  // 从指定用户移除所有角色...
         $res = \DB::table('admin')->where(['id'=>$id])->delete();
         if($res == 1){
             return 1;
@@ -208,7 +230,8 @@ class AdminController extends Controller
 //        return dd($arr);
 
         $res = \DB::table("admin")->where(['id'=>$arr['id']])->update(['status'=>$arr['status']]);
-        if($res == 1){
+//        return dd($res);
+        if($res){
             return 1;
         }else{
             return 0;

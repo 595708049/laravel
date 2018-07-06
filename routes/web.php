@@ -54,4 +54,9 @@ Route::group(['namespace'=>'Admin', 'prefix'=>'admin', 'middleware'=>['AdminLogi
     Route::post('dels', 'AdminController@dels');
 });
 
+// admin 角色管理
+Route::group(['middleware' => 'AdminLogin'], function(){
+    Route::resource('/admin/role', 'Admin\RoleController');
+});
+
 

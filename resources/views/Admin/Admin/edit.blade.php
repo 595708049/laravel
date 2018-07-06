@@ -41,7 +41,7 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="password" class="input-text" autocomplete="off" value="{{ $data->password }}" placeholder="密码" id="password" name="password">
+				<input type="password" class="input-text" autocomplete="off" value="" placeholder="密码" id="password" name="password">
 			</div>
 		</div>
 		<div class="row cl">
@@ -79,10 +79,9 @@
 			<label class="form-label col-xs-4 col-sm-3">角色：</label>
 			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
 				<select class="select" name="adminRole" size="1">
-					<option value="0">超级管理员</option>
-					<option value="1">总编</option>
-					<option value="2">栏目主辑</option>
-					<option value="3">栏目编辑</option>
+					@foreach($role as $v)
+						<option value="{{  $v->id }}" @if($data->role == $v->id) selected @endif>{{ $v->roleName }}</option>
+					@endforeach
 				</select>
 				</span> </div>
 		</div>
