@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class RoleController extends Controller
+class RoleController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,11 @@ class RoleController extends Controller
     public function index()
     {
         //
-        $data = \DB::table('role')->get();
+        $data = \DB::table('role')->paginate(3);
+        $count = \DB::table('role')->count();
+//        dd($count);
 //        dd($data);
-        return view('admin.role.list', ['data'=>$data]);
+        return view('admin.role.list', ['data'=>$data, 'count'=>$count]);
     }
 
     /**

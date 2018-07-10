@@ -87,6 +87,8 @@ $(function(){
 		// alert(yzm_new);
 		$('#img').attr('src', yzm_new);
 	});
+      // 验证码验证
+
 	// 验证数据
 	/*
 	$("input[name='btnok']").click(function(){

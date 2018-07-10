@@ -35,6 +35,9 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin'], function(){
     
     // 验证
     Route::post('login/check', 'LoginController@check');
+
+    // 退出
+    Route::get('logout', 'LoginController@logout');
 });
 
 

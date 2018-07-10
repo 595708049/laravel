@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\AdminRole;
 use App\Admin;
 
-class AdminController extends Controller
+class AdminController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $data = \DB::table('admin')->get();
+        $data = \DB::table('admin')->paginate(10);
         $count = \DB::table('admin')->count();
 //        dd($data);
         return view("admin.admin.list", ['data'=>$data, 'count'=>$count]);
@@ -71,7 +70,7 @@ class AdminController extends Controller
             $status = $request->input("status");
             $arr = [
                 'name'     => $adminName,
-                'password' => \Hash::make($password),
+                'password' => md5($password),
                 'sex'      => $sex,
                 'role'     => $adminRole,
                 'addtime'  => time(),
@@ -174,7 +173,7 @@ class AdminController extends Controller
           }
           $arr1 = [
               'name'     => $arr['adminName'],
-              'password' => $arr['password'],
+              'password' => md5($arr['password']),
               'sex'      => $arr['sex'],
               'role'     => $arr['adminRole'],
               'status'   => $arr['status']

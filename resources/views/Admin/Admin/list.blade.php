@@ -1,5 +1,5 @@
 ﻿@extends("admin.common.common")
-
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 @section('title')
 <title>管理员列表 - 管理员列表</title>
 @endsection
@@ -69,7 +69,27 @@
                 @endforeach
 				</tbody>
 			</table>
+		    {{--<style>--}}
+				{{--li a {float:left;}--}}
+				{{--.pagination {--}}
+					{{--width: 300px;--}}
+					{{--height: 50px;--}}
+					{{--margin: 0 auto;--}}
+				{{--}--}}
+				{{--.pagination li{--}}
+					{{--float: left;--}}
+					{{--height: 50px;--}}
+					{{--float: left;--}}
+					{{--display: block;--}}
+					{{--margin:0 10px ;--}}
+				{{--}--}}
+				{{--.pagination li,span{--}}
+					{{--float: left;--}}
+					{{--display: block;--}}
+				{{--}--}}
+			{{--</style>--}}
 		</article>
+		{{ $data->links() }}
 	</div>
 </section>
 @endsection
