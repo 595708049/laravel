@@ -44,6 +44,7 @@ class AdminController extends BaseController
      */
     public function store(Request $request)
     {
+      // dd($request->all());
         /*数据验证
         $data = $request->all();
         $rule = [
@@ -76,6 +77,7 @@ class AdminController extends BaseController
                 'addtime'  => time(),
                 'status'   => $status,
             ];
+
             // 判断用户名是否存在
             $name = \DB::table('admin')->where(['name'=>$adminName])->count();
             if($name > 0){
@@ -86,7 +88,7 @@ class AdminController extends BaseController
                 ]);
             }
             $res = \DB::table('admin')->insertGetId($arr);   // 返回插入的id
-//        dd($res);
+
             if($res){
                 
 //                $admin_role = new AdminRole();
