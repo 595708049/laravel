@@ -10,21 +10,20 @@
     <link rel="Bookmark" href="favicon.ico" >
     <link rel="Shortcut Icon" href="favicon.ico" />
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="lib/html5.js"></script>
-    <script type="text/javascript" src="lib/respond.min.js"></script>
-    <![endif]-->
+    <!--<script type="text/javascript" src="lib/html5.js"></script>-->
+    <!--<script type="text/javascript" src="lib/respond.min.js"></script>-->    
+    <!--[endif]-->
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('js/admin/static/h-ui/css/H-ui.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('js/admin/static/h-ui.admin/css/H-ui.admin.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('js/admin/lib/Hui-iconfont/1.0.8/iconfont.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('js/admin/static/h-ui.admin/skin/default/skin.css') }}" id="skin" />
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('js/admin/static/h-ui.admin/css/style.css') }}" />
     <!--[if IE 6]>
-    <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
-    <script>DD_belatedPNG.fix('*');</script>
-    <![endif]-->
+    <!--<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>-->
+    <!--<script>DD_belatedPNG.fix('*');</script>-->
+    <!--[endif]-->
     <!--/meta 作为公共模版分离出去-->
-
-    @yield('title')
+    
     <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
     <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
 </head>
@@ -100,7 +99,7 @@
             <dd>
                 <ul>
                     <li><a href="product-brand.html" title="品牌管理">品牌管理</a></li>
-                    <li><a href="product-category.html" title="分类管理">分类管理</a></li>
+                    <li><a href="/admin/category" title="分类管理">分类管理</a></li>
                     <li><a href="product-list.html" title="产品管理">产品管理</a></li>
                 </ul>
             </dd>
@@ -133,7 +132,7 @@
             <dd>
                 <ul>
                     <li><a href="/admin/role" title="角色管理">角色管理</a></li>
-                    <li><a href="admin-permission.html" title="权限管理">权限管理</a></li>
+                    <li><a href="/admin/rule" title="权限管理">权限管理</a></li>
                     <li><a href="{{ url('admin/admin') }}" title="管理员列表">管理员列表</a></li>
                 </ul>
             </dd>

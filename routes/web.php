@@ -62,4 +62,20 @@ Route::group(['middleware' => 'AdminLogin'], function(){
     Route::resource('/admin/role', 'Admin\RoleController');
 });
 
+// 权限
+Route::group(['middleware' => 'AdminLogin'], function(){
+    Route::resource('/admin/rule', 'Admin\RuleController');
+});
+
+// 分类
+Route::group(['middleware'=>'AdminLogin'], function(){
+    // 首页
+    Route::get('/admin/category', 'Admin\CategoryController@index');
+    // 增加
+    Route::match(['get', 'post'], '/admin/category/add', 'Admin\CategoryController@add');
+
+});
+
+
+
 
